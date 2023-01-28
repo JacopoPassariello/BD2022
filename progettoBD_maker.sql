@@ -1,4 +1,4 @@
-#drop database if exists progettobd;
+drop database if exists progettobd;
 create database progettobd;
 use progettobd;
 
@@ -24,14 +24,13 @@ create table Referente (
 
 #Sede (Indirizzo (Numero Civico, Via, Città, CAP), Tipo)
 create table Sede (
+	ID int primary key,
 	Numero_civico int not null,
     Via char(32) not null,
     Citta char(32) not null,
     CAP int not null,
     Tipo char(20) not null,
     Referente char(16) not null,
-    
-    primary key (numero_civico, via, citta, cap),
     
     foreign key (referente) references referente(cf)
 );
@@ -46,14 +45,18 @@ create table Dipendente (
     IBAN char(33) not null,
     Retribuzione double not null,
     Ore int not null,
-    Bonus double not null,
-    Livello_CCNL int not null,
-    Civico_Sede int not null,
-    Via_Sede char(32) not null,
-    Citta_Sede char(32) not null,
-    CAP_Sede int not null,
+    Bonus double not null
+);
+
+#Luogo di Lavoro(id sede, cf dipendente)
+create table Luogo_di_Lavoro (
+	id_sede int,
+    cf_dipendente char(16),
     
-    foreign key (civico_sede, via_sede, citta_sede, cap_sede) references sede(numero_civico, via, citta, cap)
+    primary key (id_sede, cf_dipendente),
+    
+    foreign key (id_sede) references sede(id),
+    foreign key (cf_dipendente) references dipendente(cf)
 );
 
 #Fattura (Numero Fattura, Valore, IBAN mittente, IBAN ricevente, Data, Descrizione)
