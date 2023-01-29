@@ -93,28 +93,22 @@ create table Veicolo (
 
 #Assegnazione Materiale(Indirizzo Sede, Numero Lotto)
 create table Assegnazione_Materiale (
-	Civico_Sede int not null,
-    Via_Sede char(32) not null,
-    Citta_Sede char(32) not null,
-    CAP_Sede int not null,
+	Id_Sede int not null,
     Numero_Lotto int not null,
     
-    primary key (civico_sede, via_sede, citta_sede, cap_sede, numero_lotto),
+    primary key (id_sede, numero_lotto),
     
-	foreign key (civico_sede, via_sede, citta_sede, cap_sede) references sede(numero_civico, via, citta, cap),
+	foreign key (id_sede) references sede(id),
     foreign key (numero_lotto) references lotto_materiale(numero_lotto)
 );
 
 #Assegnazione Veicolo(Indirizzo Sede, Targa)
 create table Assegnazione_Veicolo (
-	Civico_Sede int not null,
-    Via_Sede char(32) not null,
-    Citta_Sede char(32) not null,
-    CAP_Sede int not null,
+	Id_Sede int not null,
     Targa_Veicolo char(7) not null,
     
-    primary key (civico_sede, via_sede, citta_sede, cap_sede, targa_veicolo),
+    primary key (id_sede, targa_veicolo),
     
-	foreign key (civico_sede, via_sede, citta_sede, cap_sede) references sede(numero_civico, via, citta, cap),
+	foreign key (id_sede) references sede(id),
     foreign key (targa_veicolo) references veicolo(targa)
 );
