@@ -64,57 +64,47 @@ create table Fattura (
 	Numero_Fattura int primary key,
     Valore double not null,
     IBAN_mittente char(33) not null,
-    IBAN_ricevente char(33) not null,
+    IBAN_ricevente char(33),
     Data date not null,
     Descrizione char(128)
 );
 
-#Lotto Materiale(Numero Lotto, Nome, Quantità Totale, Descrizione, Numero Fattura)
+#Lotto Materiale(Numero Lotto, Nome, Quantità Totale, Descrizione, IBAN Venditore)
 create table Lotto_Materiale (
 	Numero_Lotto int primary key,
     Nome char(16) not null,
     Quantita_Totale int not null,
     Descrizione char(128),
-    Numero_Fattura int not null,
-    
-    foreign key (numero_fattura) references fattura(numero_fattura)
+	IBAN_Venditore char(33) not null
 );
 
-#Veicolo(Targa, Scadenza Assicurazione, Guidatore, Modello, Numero Fattura)
+#Veicolo(Targa, Scadenza Assicurazione, Guidatore, Modello, IBAN Assicuratore)
 create table Veicolo (
 	Targa char(7) primary key,
     Scadenza_Assicurazione date not null,
     Guidatore char(16),
 	Modello char(32) not null,
-    Numero_Fattura int not null,
-    
-    foreign key (numero_fattura) references fattura(numero_fattura)
+    IBAN_Assicuratore char(33) not null
 );
 
 #Assegnazione Materiale(Indirizzo Sede, Numero Lotto)
 create table Assegnazione_Materiale (
-	Civico_Sede int not null,
-    Via_Sede char(32) not null,
-    Citta_Sede char(32) not null,
-    CAP_Sede int not null,
+	Id_Sede int not null,
     Numero_Lotto int not null,
     
-    primary key (civico_sede, via_sede, citta_sede, cap_sede, numero_lotto),
+    primary key (id_sede, numero_lotto),
     
-	foreign key (civico_sede, via_sede, citta_sede, cap_sede) references sede(numero_civico, via, citta, cap),
+	foreign key (id_sede) references sede(id),
     foreign key (numero_lotto) references lotto_materiale(numero_lotto)
 );
 
 #Assegnazione Veicolo(Indirizzo Sede, Targa)
 create table Assegnazione_Veicolo (
-	Civico_Sede int not null,
-    Via_Sede char(32) not null,
-    Citta_Sede char(32) not null,
-    CAP_Sede int not null,
+	id_sede int not null,
     Targa_Veicolo char(7) not null,
     
-    primary key (civico_sede, via_sede, citta_sede, cap_sede, targa_veicolo),
+    primary key (id_sede, targa_veicolo),
     
-	foreign key (civico_sede, via_sede, citta_sede, cap_sede) references sede(numero_civico, via, citta, cap),
+	foreign key (id_sede) references sede(id),
     foreign key (targa_veicolo) references veicolo(targa)
 );

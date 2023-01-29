@@ -3,6 +3,8 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainMenuGUI {
 
@@ -90,18 +92,33 @@ public class MainMenuGUI {
                         outputArea.setText("");
 
                         String table = (String) tables.getSelectedItem();
-                        ResultSet contents = statement.executeQuery("select * from " + table);
+                        ResultSet contents = statement.executeQuery("select * from " + table.replace(' ', '_'));
                         ResultSetMetaData metadata = contents.getMetaData();
+                        List<String> columns = new ArrayList<>();
 
+                        //collect all col names in a list
                         int columnNumber = metadata.getColumnCount();
                         for(int i = 1; i <= columnNumber; i++) {
-                            outputArea.setText(outputArea.getText() + metadata.getColumnName(i).replace('_', ' ') + "\t");
+                            columns.add(metadata.getColumnName(i));
                         }
-                        outputArea.setText(outputArea.getText() + "\n");
-                        //TODO: stampare tutti i valori da ogni colonna
+
+                        //print all col names
+                        for(String column : columns) {
+                            outputArea.append(column.replace('_', ' ') + "\t");
+                        }
+                        outputArea.append("\n");
+
+                        //print all contents from the table
+                        while(contents.next()){
+                            for(String column : columns) {
+                                outputArea.append(contents.getString(column) + "\t");
+                            }
+                            outputArea.append("\n");
+                        }
 
                     } catch (SQLException e) {
-                        outputArea.setText("C'è stato un errore nell'esecuzione dell'operazione.");
+                        outputArea.setText("C'è stato un errore nell'esecuzione dell'operazione.\n");
+                        outputArea.append(e.getMessage());
                     }
                 }
         );
