@@ -22,7 +22,7 @@ create table Referente (
     Numero_di_Telefono char(12) not null
 );
 
-#Sede (Indirizzo (Numero Civico, Via, Città, CAP), Tipo)
+#Sede (ID, Indirizzo (Numero Civico, Via, Città, CAP), Tipo, Referente Cantiere)
 create table Sede (
 	ID int primary key,
 	Numero_civico int not null,
@@ -30,9 +30,9 @@ create table Sede (
     Citta char(32) not null,
     CAP int not null,
     Tipo char(20) not null,
-    Referente char(16) not null,
+    Referente_Cantiere char(16) not null,
     
-    foreign key (referente) references referente(cf)
+    foreign key (referente_cantiere) references referente(cf)
 );
 
 #Dipendente (CF, Nome, Cognome, Ruolo, Numero di Telefono, IBAN, Retribuzione, Paga Oraria, Ore, Bonus, Livello CCNL, Luogo di Lavoro)
