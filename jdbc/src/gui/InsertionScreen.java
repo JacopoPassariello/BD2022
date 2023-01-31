@@ -7,17 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InsertionScreen {
-    private record Line(JLabel label, JTextField field) {}
+    public record Line(JLabel label, JTextField field) {}
 
     public InsertionScreen(Connection connection) throws SQLException {
         JFrame frame = new JFrame("Schermata di inserimento");
-        JPanel panel = new JPanel();
+        JSplitPane panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         final JPanel[] topGrid = {new JPanel()};
         JComboBox<String> tables = Utils.compileTables(connection);
         JButton compileFrame = new JButton("OK");
         JButton executeInsertion = new JButton("Inserisci");
         JTextArea outputArea = new JTextArea();
         JScrollPane scroller = new JScrollPane(outputArea);
+        final List<Line>[] lines = new List[]{new ArrayList<Line>()};
 
         outputArea.setEditable(false);
         outputArea.setVisible(true);
@@ -29,19 +30,19 @@ public class InsertionScreen {
                     try {
                         outputArea.setText("");
                         String table = (String) tables.getSelectedItem();
-                        List<Line> lines = compileLines(connection, table);
+                        lines[0] = compileLines(connection, table);
                         panel.remove(topGrid[0]);
                         topGrid[0] = new JPanel();
-                        topGrid[0].setLayout(new GridLayout(lines.size() + 1, 1));
+                        topGrid[0].setLayout(new GridLayout(lines[0].size() + 2, 1));
                         topGrid[0].add(tables);
                         topGrid[0].add(compileFrame);
 
-                        for(Line l : lines) {
+                        for(Line l : lines[0]) {
                             topGrid[0].add(l.label());
                             topGrid[0].add(l.field());
                         }
                         topGrid[0].add(executeInsertion);
-                        panel.add(topGrid[0], BorderLayout.CENTER);
+                        panel.add(topGrid[0]);
                         frame.setVisible(false);
                         frame.setVisible(true);
                     } catch(SQLException e) {
@@ -53,14 +54,26 @@ public class InsertionScreen {
 
         executeInsertion.addActionListener(
                 actionEvent -> {
-                    //TODO: insertion :|
+                    try {
+                        String table = (String) tables.getSelectedItem();
+                        Statement statement = connection.createStatement();
+                        ResultSet set = statement.executeQuery("select * from " + table.replace(' ', '_'));
+                        ResultSetMetaData metaData = set.getMetaData();
+                        //input the stuff
+                        String values =  Utils.compileValues(lines[0], metaData);
+                        statement.executeUpdate("insert into " + table.replace(' ', '_') + " values (" + values + ")");
+                        statement.close();
+                        set.close();
+                        outputArea.setText("Inserimento riuscito. Valori inseriti:\n" + values);
+                    } catch(SQLException e) {
+                        outputArea.setText("C'è stato un errore:\n" + e.getMessage());
+                    }
                 }
         );
 
         frame.add(panel);
-        panel.setLayout(new BorderLayout());
-        panel.add(topGrid[0], BorderLayout.CENTER);
-        panel.add(scroller, BorderLayout.SOUTH);
+        panel.add(topGrid[0]);
+        panel.add(scroller);
         topGrid[0].setLayout(new GridLayout(1,2));
         topGrid[0].add(tables);
         topGrid[0].add(compileFrame);
