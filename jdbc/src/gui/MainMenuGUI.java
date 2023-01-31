@@ -8,12 +8,14 @@ public class MainMenuGUI {
 
     public MainMenuGUI(Connection connection, String dbName) {
 
+        final String[] supportedOperations = new String[]{"Inserimento", "Visualizza tabella", "Aggiornamento"};
+
         JFrame frame = new JFrame("Interfaccia database \"" + dbName + "\"");
 
         JPanel topPanel = new JPanel();
         JPanel panel = new JPanel();
         JLabel opLabel = new JLabel("Selezionare operazione: ");
-        JComboBox<String> opCombo = new JComboBox<>(new String[]{"Inserimento", "Visualizza tabella", "Errore"});
+        JComboBox<String> opCombo = new JComboBox<>(supportedOperations);
         JButton enter = new JButton("OK");
         JTextArea outputArea = new JTextArea();
 
@@ -37,6 +39,9 @@ public class MainMenuGUI {
                             }
                             case 1 -> {
                                 new FullTableScreen(connection);
+                            }
+                            case 2 ->{
+                                new UpdateTableScreen(connection);
                             }
                             default -> {
                                 outputArea.setText("C'è stato un errore nella selezione dell'operazione da eseguire. Riprova.");
