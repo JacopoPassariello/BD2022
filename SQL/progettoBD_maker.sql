@@ -2,109 +2,79 @@ drop database if exists progettobd;
 create database progettobd;
 use progettobd;
 
-#Consulente (CF, Nome, Cognome, Ruolo, Numero di Telefono, IBAN, Retribuzione Mensile, PIVA)
-create table Consulente (
-	CF char(16) primary key,
-    Nome char(32) not null,
-    Cognome char(32) not null,
-    Ruolo char(32) not null,
-    Numero_di_telefono char(12) not null,
-    IBAN char(33) not null,
-    Retribuzione_mensile double not null,
-    PIVA char(11)  not null
+
+
+create table dipendente (
+	cf char(16) primary key,
+    nome char(16) not null,
+    cognome char(32) not null,
+    ore_di_lavoro int not null,
+    paga_oraria double not null,
+    bonus double,
+    telefono char(12) not null
 );
 
-#Referente(CF, Nome, Cognome, Numero di Telefono)
-create table Referente (
-	CF char(16) primary key,
-    Nome char(32) not null,
-    Cognome char(32) not null,
-    Numero_di_Telefono char(12) not null
+create table sede (
+	id int primary key,
+    civico int not null,
+    via char(32) not null,
+    cap int not null,
+    città char(32) not null,
+    tipo enum('magazzino', 'ufficio', 'cantiere') not null
 );
 
-#Sede (ID, Indirizzo (Numero Civico, Via, Città, CAP), Tipo, Referente Cantiere)
-create table Sede (
-	ID int primary key,
-	Numero_civico int not null,
-    Via char(32) not null,
-    Citta char(32) not null,
-    CAP int not null,
-    Tipo char(20) not null,
-    Referente_Cantiere char(16) not null,
+create table lotto_materiale (
+	id_inventario int primary key,
+	data_acquisto date not null,
+    costo double not null,
+    marca char(32) not null,
+    modello char(32) not null,
+    quantita_totale int not null
+);
+
+create table assegnazione_materiale (
+	lotto int,
+    sede int,
+    quantita int not null,
     
-    foreign key (referente_cantiere) references referente(cf)
-);
-
-#Dipendente (CF, Nome, Cognome, Ruolo, Numero di Telefono, IBAN, Retribuzione, Paga Oraria, Ore, Bonus, Livello CCNL, Luogo di Lavoro)
-create table Dipendente (
-	CF char(16) primary key,
-    Nome char(32) not null,
-    Cognome char(32) not null,
-    Ruolo char(32) not null,
-    Numero_di_telefono char(12) not null,
-    IBAN char(33) not null,
-    Retribuzione double not null,
-    Ore int not null,
-    Bonus double not null
-);
-
-#Luogo di Lavoro(id sede, cf dipendente)
-create table Luogo_di_Lavoro (
-	id_sede int,
-    cf_dipendente char(16),
+    primary key (lotto, sede),
     
-    primary key (id_sede, cf_dipendente),
-    
-    foreign key (id_sede) references sede(id),
-    foreign key (cf_dipendente) references dipendente(cf)
+    foreign key (lotto) references lotto_materiale(id_inventario) on delete cascade,
+    foreign key (sede) references sede(id) on delete cascade
 );
 
-#Fattura (Numero Fattura, Valore, IBAN mittente, IBAN ricevente, Data, Descrizione)
-create table Fattura (
-	Numero_Fattura int primary key,
-    Valore double not null,
-    IBAN_mittente char(33) not null,
-    IBAN_ricevente char(33),
-    Data date not null,
-    Descrizione char(128)
+create table macchinario (
+	id_inventario int primary key,
+	data_acquisto date not null,
+    costo double not null,
+    marca char(32) not null,
+    modello char(32) not null,
+    sede int not null,
+    
+    foreign key (sede) references sede(id)
 );
 
-#Lotto Materiale(Numero Lotto, Nome, Quantità Totale, Descrizione, IBAN Venditore)
-create table Lotto_Materiale (
-	Numero_Lotto int primary key,
-    Nome char(16) not null,
-    Quantita_Totale int not null,
-    Descrizione char(128),
-	IBAN_Venditore char(33) not null
+create table veicolo (
+	id_inventario int primary key,
+	data_acquisto date not null,
+    costo double not null,
+    marca char(32) not null,
+    modello char(32) not null,
+    scadenza_assicurazione date not null,
+    targa char(10) not null unique,
+    sede int not null,
+    guidatore char(16),
+    
+    foreign key (sede) references sede(id),
+    foreign key (guidatore) references dipendente(cf)
 );
 
-#Veicolo(Targa, Scadenza Assicurazione, Guidatore, Modello, IBAN Assicuratore)
-create table Veicolo (
-	Targa char(7) primary key,
-    Scadenza_Assicurazione date not null,
-    Guidatore char(16),
-	Modello char(32) not null,
-    IBAN_Assicuratore char(33) not null
-);
-
-#Assegnazione Materiale(Indirizzo Sede, Numero Lotto)
-create table Assegnazione_Materiale (
-	Id_Sede int not null,
-    Numero_Lotto int not null,
+create table referente (
+	cf char(16) primary key,
+    nome char(16) not null,
+    cognome char(32) not null,
+    telefono char(12) not null,
+    cantiere int not null,
     
-    primary key (id_sede, numero_lotto),
-    
-	foreign key (id_sede) references sede(id),
-    foreign key (numero_lotto) references lotto_materiale(numero_lotto)
-);
-
-#Assegnazione Veicolo(Indirizzo Sede, Targa)
-create table Assegnazione_Veicolo (
-	id_sede int not null,
-    Targa_Veicolo char(7) not null,
-    
-    primary key (id_sede, targa_veicolo),
-    
-	foreign key (id_sede) references sede(id),
-    foreign key (targa_veicolo) references veicolo(targa)
+    foreign key (cantiere) references sede(id) on delete cascade
 );
