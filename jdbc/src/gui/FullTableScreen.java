@@ -8,7 +8,8 @@ import java.util.List;
 
 public class FullTableScreen {
     public FullTableScreen(Connection connection) throws SQLException {
-        JFrame frame = new JFrame();
+        //Instantiating GUI components
+        JFrame frame = new JFrame("Schermata di visualizzazione");
         JPanel panel = new JPanel();
         JPanel topRow = new JPanel();
         JLabel tableLabel = new JLabel("Scegliere la tabella: ");
@@ -17,6 +18,7 @@ public class FullTableScreen {
         JScrollPane scroller = new JScrollPane(outputArea);
         JComboBox<String> tables = Utils.compileTables(connection);
 
+        //setting up properties for the GUI components
         outputArea.setEditable(false);
         outputArea.setVisible(true);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -40,7 +42,7 @@ public class FullTableScreen {
                             columns.add(metadata.getColumnName(i));
                         }
 
-                        //print all col names
+                        //print all column names
                         for(String column : columns) {
                             outputArea.append(column.replace('_', ' ') + "\t");
                         }
@@ -61,6 +63,7 @@ public class FullTableScreen {
                 }
         );
 
+        //building the GUI
         frame.add(panel);
         panel.add(topRow, BorderLayout.NORTH);
         panel.add(scroller, BorderLayout.CENTER);
