@@ -141,8 +141,8 @@ insert into referente values
 insert into luogo_lavoro values
 ("RSSMRA80A01H501U", 3, "Capo Cantiere", 2),
 ("JOEMMA80A01F839M", 2, "Capo Magazzino", 3),
-("LNATNG80A01B963O", 1, "Capo Cantiere", 2),
-("MRAVRD80A01B990Q", 4, "Capo Ufficio", 1),
+("LNATNG80A01B963O", 1, "Capo Ufficio", 1),
+("MRAVRD80A01B990Q", 4, "Capo Cantiere", 2),
 ("CLDBGM80A41E463X", 5, "Capo Cantiere", 2),
 ("LNRNMY31C26L219S", 1, "Impiegato", 1),
 ("VTTMNL63A01H224Y", 5, "Fravecatore", 2),
