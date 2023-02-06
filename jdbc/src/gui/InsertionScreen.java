@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InsertionScreen {
-    public record Line(JLabel label, JTextField field) {} //used to store label and corresponding textfield to be automatically generated based on the table to insert into
-
     public InsertionScreen(Connection connection) throws SQLException {
         //Instantiating the GUI components
         JFrame frame = new JFrame("Schermata di inserimento");
@@ -32,9 +30,10 @@ public class InsertionScreen {
                     try {
                         outputArea.setText("");
                         String table = (String) tables.getSelectedItem();
+                        if(table == null) return;
 
                         //figures out how many columns are in the table and instantiates enough lines, then adds them to the topGrid JPanel
-                        lines[0] = compileLines(connection, table);
+                        lines[0] = Utils.compileLines(connection, table);
                         panel.remove(topGrid[0]);
                         topGrid[0] = new JPanel();
                         topGrid[0].setLayout(new GridLayout(lines[0].size() + 2, 1));
@@ -88,24 +87,6 @@ public class InsertionScreen {
         frame.setSize(400, 600);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
-    }
-
-    //builds the line list based on what columns are in the given table
-    private static List<Line> compileLines(Connection connection, String table) throws SQLException {
-        List<Line> lines = new ArrayList<>();
-
-        Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery("select * from " + table.replace(' ', '_'));
-        ResultSetMetaData metaData = result.getMetaData();
-
-        int columnNumber = metaData.getColumnCount();
-        for(int i = 1; i <= columnNumber; i++) {
-            lines.add(new Line(new JLabel(metaData.getColumnName(i).replace('_', ' ')), new JTextField()));
-        }
-
-        result.close();
-        statement.close();
-        return lines;
     }
 
     //returns a string containing the values to be given the "insert into <table> values" query, correctly formatted

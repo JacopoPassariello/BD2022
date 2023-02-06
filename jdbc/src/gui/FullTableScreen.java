@@ -31,6 +31,8 @@ public class FullTableScreen {
                         outputArea.setText("");
 
                         String table = (String) tables.getSelectedItem();
+                        if(table == null) return;
+
                         Statement statement = connection.createStatement();
                         ResultSet contents = statement.executeQuery("select * from " + table.replace(' ', '_'));
                         ResultSetMetaData metadata = contents.getMetaData();
@@ -49,7 +51,7 @@ public class FullTableScreen {
                         outputArea.append("\n");
 
                         //print all contents from the table
-                        while(contents.next()){
+                        while(contents.next()) {
                             for(String column : columns) {
                                 outputArea.append(contents.getString(column) + "\t");
                             }

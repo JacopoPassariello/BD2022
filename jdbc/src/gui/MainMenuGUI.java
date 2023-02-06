@@ -8,7 +8,7 @@ public class MainMenuGUI {
 
     public MainMenuGUI(Connection connection, String dbName) {
 
-        final String[] supportedOperations = new String[]{"Inserimento", "Visualizza tabella", "Aggiornamento"};
+        final String[] supportedOperations = new String[]{"Inserimento", "Visualizza tabella", "Aggiornamento", "Query diretta"};
 
         JFrame frame = new JFrame("Interfaccia database \"" + dbName + "\"");
 
@@ -40,8 +40,11 @@ public class MainMenuGUI {
                             case 1 -> {
                                 new FullTableScreen(connection);
                             }
-                            case 2 ->{
+                            case 2 -> {
                                 new UpdateTableScreen(connection);
+                            }
+                            case 3 -> {
+                                new RawQueryScreen(connection);
                             }
                             default -> {
                                 outputArea.setText("C'è stato un errore nella selezione dell'operazione da eseguire. Riprova.");
