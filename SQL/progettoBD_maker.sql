@@ -8,9 +8,9 @@ create table dipendente (
 	cf char(16) primary key,
     nome char(16) not null,
     cognome char(32) not null,
-    ore_di_lavoro int not null,
+    ore_lavoro int not null,
     paga_oraria double not null,
-    bonus double,
+    bonus double not null,
     telefono char(12) not null
 );
 
@@ -93,18 +93,18 @@ create table referente (
 );
 
 insert into dipendente values
-("RSSMRA80A01H501U", "Mario", "Rossi", 140, 10, null, "393934595232"),
+("RSSMRA80A01H501U", "Mario", "Rossi", 140, 10, 0, "393934595232"),
 ("JOEMMA80A01F839M", "Joe", "Mama", 150, 9, 2.5, "391186002558"),
-("LNATNG80A01B963O", "Alan", "Turing", 210, 12, null, "398014088727"),
-("MRAVRD80A01B990Q", "Maria", "Verdi", 140, 10, null, "396754319098"),
+("LNATNG80A01B963O", "Alan", "Turing", 210, 12, 0, "398014088727"),
+("MRAVRD80A01B990Q", "Maria", "Verdi", 140, 10, 0, "396754319098"),
 ("CLDBGM80A41E463X", "Claudia", "Bergamini", 40, 9.5, 15, "398972792526"),
-("LNRNMY31C26L219S", "Leonard", "Nimoy", 100, 10, null, "396048637464"),
-("VTTMNL63A01H224Y", "Emanuele", "Vittorio", 140, 10, null, "397337646695"),
+("LNRNMY31C26L219S", "Leonard", "Nimoy", 100, 10, 0, "396048637464"),
+("VTTMNL63A01H224Y", "Emanuele", "Vittorio", 140, 10, 0, "397337646695"),
 ("GRRGRD92M55A509U", "Gerarda", "Guerriero", 160, 9, 30, "393076501229"),
 ("ZNJPLA12T21I820U", "Paul", "Zonej", 200, 11, 45, "396453335802"),
-("BTTBMN67A01G482M", "Beniamino", "Bottone", 140, 10, null, "392255383225"),
-("BLNFMN94A41H703Y", "Filomena", "Balanzoni", 130, 10.5, null, "396810031874"),
-("WLFVGN80A41G015K", "Virginia", "Woolf", 130, 10.5, null, "393770249509"),
+("BTTBMN67A01G482M", "Beniamino", "Bottone", 140, 10, 0, "392255383225"),
+("BLNFMN94A41H703Y", "Filomena", "Balanzoni", 130, 10.5, 0, "396810031874"),
+("WLFVGN80A41G015K", "Virginia", "Woolf", 130, 10.5, 0, "393770249509"),
 ("LFOTNY02M07A509Z", "Tony", "Loaf", 20, 10, 2000, "397174421993");
 
 insert into sede values
