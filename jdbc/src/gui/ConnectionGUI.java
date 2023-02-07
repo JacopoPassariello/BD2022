@@ -59,7 +59,7 @@ public class ConnectionGUI {
                         frame.dispose();
                     }
                     catch(SQLException e) {
-                        outputArea.setText("There was an error with connecting to the database.");
+                        outputArea.setText("C'è stato un errore nel tentativo di connessione al database.");
                     }
                 }
         );

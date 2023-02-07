@@ -31,30 +31,12 @@ public class FullTableScreen {
                         outputArea.setText("");
 
                         String table = (String) tables.getSelectedItem();
+                        if(table == null) return;
+
                         Statement statement = connection.createStatement();
                         ResultSet contents = statement.executeQuery("select * from " + table.replace(' ', '_'));
-                        ResultSetMetaData metadata = contents.getMetaData();
-                        List<String> columns = new ArrayList<>();
 
-                        //collect all col names in a list
-                        int columnNumber = metadata.getColumnCount();
-                        for(int i = 1; i <= columnNumber; i++) {
-                            columns.add(metadata.getColumnName(i));
-                        }
-
-                        //print all column names
-                        for(String column : columns) {
-                            outputArea.append(column.replace('_', ' ') + "\t");
-                        }
-                        outputArea.append("\n");
-
-                        //print all contents from the table
-                        while(contents.next()){
-                            for(String column : columns) {
-                                outputArea.append(contents.getString(column) + "\t");
-                            }
-                            outputArea.append("\n");
-                        }
+                        outputArea.setText(Utils.printTable(contents));
 
                     } catch (SQLException e) {
                         outputArea.setText("C'è stato un errore nell'esecuzione dell'operazione.\n");
