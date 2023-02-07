@@ -69,7 +69,7 @@ public class Utils {
         return lines;
     }
 
-    //returns a string containing the values to be given the "insert into <table> values" query, correctly formatted
+    //returns a list of strings containing the values to be given the "insert into <table> values <values>" and the "update <table> set <values> where <cond>" queries, correctly formatted
     public static List<String> compileValues(List<Line> lines, Connection connection, String table) throws SQLException {
         List<String> values = new ArrayList<>();
 
