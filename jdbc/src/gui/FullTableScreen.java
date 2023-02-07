@@ -3,8 +3,6 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FullTableScreen {
     public FullTableScreen(Connection connection) throws SQLException {

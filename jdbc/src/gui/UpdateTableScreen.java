@@ -49,10 +49,12 @@ public class UpdateTableScreen {
         retrieveRecord.addActionListener(
                 actionEvent -> {
                     try {
+                        //primary key will always be first
                         String key = lines.get(0).field().getText();
                         Statement statement = connection.createStatement();
                         ResultSet resultSet = statement.executeQuery("select * from dipendente where cf = \"" + key + "\"");
 
+                        //updates the contents of all the text areas with the contents of the record
                         int i = 1;
                         resultSet.next();
                         for(Line l : lines) {
@@ -76,6 +78,7 @@ public class UpdateTableScreen {
                         String key = lines.get(0).field().getText();
                         String setStatement = "";
 
+                        //puts together a correctly formatted string to pass down to the update query in the set statement
                         int i = 0;
                         for(Line l : lines) {
                             setStatement += l.label().getText().replace(' ', '_') + " = " + values.get(i);
@@ -86,7 +89,7 @@ public class UpdateTableScreen {
                         statement.executeUpdate("update dipendente\nset " + setStatement + "\nwhere cf = \"" + key + "\"");
 
                         outputArea.setText("Aggiornamento riuscito. Nuovi valori:\n" + setStatement);
-                        keysArea.setText(getKeys(connection));
+                        keysArea.setText(getKeys(connection)); //refresh the keys list, in case the key of the record has been changed
 
                         statement.close();
                     } catch(SQLException e) {
@@ -104,7 +107,7 @@ public class UpdateTableScreen {
                         statement.executeUpdate("delete from dipendente where cf = \"" + key + "\"");
 
                         outputArea.setText("Record con chiave \"" + key + "\" eliminato con successo.");
-                        keysArea.setText(getKeys(connection));
+                        keysArea.setText(getKeys(connection)); //refresh the keys list to reflect the deletion of the record
 
                         statement.close();
                     } catch(SQLException e) {
@@ -125,6 +128,7 @@ public class UpdateTableScreen {
         rightPanel.add(linesPanel, BorderLayout.NORTH);
         rightPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
+        //adding each line to the panel
         linesPanel.setLayout(new GridLayout(lines.size() + 1, 2));
         for(Line l : lines) {
             linesPanel.add(l.label());

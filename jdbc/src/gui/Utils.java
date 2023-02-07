@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//this class contains various parts of code that are useful to multiple of the main classes
 public class Utils {
 
     public static String printTable(ResultSet contents) throws SQLException {
@@ -36,7 +37,7 @@ public class Utils {
         return result;
     }
 
-    //returns a jcombobox containing all the table names from a given connection to a database
+    //returns a combobox containing all the table names from a given connection to a database
     public static JComboBox<String> compileTables(Connection connection) throws SQLException {
         JComboBox<String> tables = new JComboBox<>();
         Statement statement = connection.createStatement();
