@@ -37,28 +37,7 @@ public class RawQueryScreen {
                         Statement statement = connection.createStatement();
                         ResultSet result = statement.executeQuery(query);
 
-                        ResultSetMetaData metadata = result.getMetaData();
-                        List<String> columns = new ArrayList<>();
-
-                        //collect all col names in a list
-                        int columnNumber = metadata.getColumnCount();
-                        for(int i = 1; i <= columnNumber; i++) {
-                            columns.add(metadata.getColumnName(i));
-                        }
-
-                        //print all column names
-                        for(String column : columns) {
-                            outputArea.append(column.replace('_', ' ') + "\t");
-                        }
-                        outputArea.append("\n");
-
-                        //print all contents from the table
-                        while(result.next()) {
-                            for(String column : columns) {
-                                outputArea.append(result.getString(column) + "\t");
-                            }
-                            outputArea.append("\n");
-                        }
+                        outputArea.setText(Utils.printTable(result));
 
                     } catch (SQLException e) {
                         outputArea.setText("C'è stato un errore:\n" + e.getMessage());

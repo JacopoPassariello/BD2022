@@ -29,8 +29,8 @@ create table luogo_lavoro (
     ruolo char(32) not null,
     tipo_sede enum('ufficio', 'cantiere', 'magazzino') not null,
     
-    foreign key (dipendente) references dipendente(cf),
-    foreign key (sede) references sede(id),
+    foreign key (dipendente) references dipendente(cf) on delete cascade,
+    foreign key (sede) references sede(id) on delete cascade,
     
     primary key (dipendente, sede)
 );
